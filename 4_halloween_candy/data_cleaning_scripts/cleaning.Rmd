@@ -39,15 +39,22 @@ removed_columns_candy_2015 <- select(candy_2015,-c(
   kale_smoothie,
   generic_brand_acetaminophen,
   vicodin,
-  white_bread
+  white_bread,
+  dental_paraphenalia
 ))%>%
   rename(going_trick_or_treating = are_you_going_actually_going_trick_or_treating_yourself)%>%
   rename(age = how_old_are_you)%>%
   rename(free_restaurant_candy =
           candy_that_is_clearly_just_the_stuff_given_out_for_free_at_restaurants) %>%
   rename( hfcs_vials = 
-          vials_of_pure_high_fructose_corn_syrup_for_main_lining_into_your_vein )
+          vials_of_pure_high_fructose_corn_syrup_for_main_lining_into_your_vein ) %>%
+  rename( marshmallow_circus_peanuts = 
+            those_odd_marshmallow_circus_peanut_things)%>%
+  rename( chick_o_sticks = chick_o_sticks_we_don_t_know_what_that_is)%>%
+  rename( black_and_orange_wrapped_brown_globs = 
+          anonymous_brown_globs_that_come_in_black_and_orange_wrappers)
 
+ names(removed_columns_candy_2015)
 ```
 # pivot/add columns
 #used pivot to make a new candy and ratings column
@@ -57,7 +64,7 @@ removed_columns_candy_2015 <- select(candy_2015,-c(
 
 ```{r}
 candy_2015_pivot <- removed_columns_candy_2015 %>%
-    pivot_longer(c(butterfinger:york_peppermint_patties, necco_wafers),
+    pivot_longer(c(butterfinger:necco_wafers),
                  names_to = "candy", values_to = "rating") %>%
     mutate(
         year = 2015,
@@ -71,5 +78,51 @@ names(candy_2015_pivot)
 
 
 ```{r}
+removed_columns_candy_2016 <- select(candy_2016, -c(
+  please_list_any_items_not_included_above_that_give_you_joy:
+    york_peppermint_patties_ignore,
+    cash_or_other_forms_of_legal_tender,
+  kale_smoothie,
+  generic_brand_acetaminophen,
+  vicodin,
+  white_bread,
+  person_of_interest_season_3_dvd_box_set_not_including_disc_4_with_hilarious_outtakes,
+  hugs_actual_physical_hugs,
+  chardonnay,
+  which_state_province_county_do_you_live_in,
+  dental_paraphenalia
+  ))%>%
+  rename(going_trick_or_treating = are_you_going_actually_going_trick_or_treating_yourself)%>%
+  rename(age = how_old_are_you)%>%
+  rename(gender = your_gender)%>%
+  rename(country = which_country_do_you_live_in) %>%
+  rename(free_restaurant_candy =
+          candy_that_is_clearly_just_the_stuff_given_out_for_free_at_restaurants) %>%
+  rename( hfcs_vials = 
+          vials_of_pure_high_fructose_corn_syrup_for_main_lining_into_your_vein ) %>%
+  rename( sourpatch_kids = sourpatch_kids_i_e_abominations_of_nature) %>%
+  rename( marshmallow_circus_peanuts = 
+            those_odd_marshmallow_circus_peanut_things) %>%
+  rename( chick_o_sticks = chick_o_sticks_we_don_t_know_what_that_is)%>%
+  rename( black_and_orange_wrapped_brown_globs = 
+          anonymous_brown_globs_that_come_in_black_and_orange_wrappers)
+names(removed_columns_candy_2016)
+```
+
+
+```{r}
+candy_2016_pivot <- removed_columns_candy_2016 %>%
+    pivot_longer(c(x100_grand_bar:york_peppermint_patties),
+                 names_to = "candy", values_to = "rating") %>%
+    mutate(
+        year = 2016,
+        rating = tolower(rating)
+    )
+names(candy_2016_pivot)
+names(candy_2015_pivot)
+```
+
+```{r}
 
 ```
+
