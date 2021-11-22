@@ -1,0 +1,12 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# before joining the tables:
+*clean column names
+*remove unnecessary columns
+
+**2005** :
+  *pivot, new columns are candy and rating
+  *add in year, gender and country columns 

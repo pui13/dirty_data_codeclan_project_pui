@@ -1,11 +1,11 @@
 {
     "id": "79846890",
-    "path": null,
-    "project_path": null,
+    "path": "~/Github/dirty_data_codeclan_project_pui/4_halloween_candy/data_cleaning_scripts/cleaning.Rmd",
+    "project_path": "data_cleaning_scripts/cleaning.Rmd",
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "2072366184",
     "contents": "",
-    "dirty": true,
+    "dirty": false,
     "created": 1637537231687.0,
     "source_on_save": false,
     "relative_order": 1,
@@ -18,11 +18,11 @@
         "scrollLine": "43"
     },
     "folds": "",
-    "lastKnownWriteTime": 17179869188,
-    "encoding": "",
+    "lastKnownWriteTime": 1637585283,
+    "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1637582835246,
+    "last_content_update": 1637585283344,
     "read_only": false,
     "read_only_alternatives": []
 }
