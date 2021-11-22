@@ -23,40 +23,53 @@ candy_2017 <- read_excel(here("raw_data/boing-boing-candy-2017.xlsx"))
 
 ```{r}
 candy_2015 <- clean_names(candy_2015)
-clean_names(candy_2016)
-clean_names(candy_2017)
+candy_2016 <- clean_names(candy_2016)
+candy_2017 <- clean_names(candy_2017)
 ```
 
+
+
 ```{r}
-candy_2015_pivot <- candy_2015 %>%
+removed_columns_candy_2015 <- select(candy_2015,-c(
+  please_leave_any_remarks_or_comments_regarding_your_choices:
+    sea_salt_flavored_stuff_probably_chocolate_since_this_is_the_it_flavor_of_the_year,
+  which_day_do_you_prefer_friday_or_sunday:
+    please_estimate_the_degrees_of_separation_you_have_from_the_following_folks_beyonce_knowles,
+  cash_or_other_forms_of_legal_tender,
+  kale_smoothie,
+  generic_brand_acetaminophen,
+  vicodin,
+  white_bread
+))%>%
+  rename(going_trick_or_treating = are_you_going_actually_going_trick_or_treating_yourself)%>%
+  rename(age = how_old_are_you)%>%
+  rename(free_restaurant_candy =
+          candy_that_is_clearly_just_the_stuff_given_out_for_free_at_restaurants) %>%
+  rename( hfcs_vials = 
+          vials_of_pure_high_fructose_corn_syrup_for_main_lining_into_your_vein )
+
+```
+# pivot/add columns
+#used pivot to make a new candy and ratings column
+#added columns in prep for binding datasets
+#changed rating values to all lowercase
+
+
+```{r}
+candy_2015_pivot <- removed_columns_candy_2015 %>%
     pivot_longer(c(butterfinger:york_peppermint_patties, necco_wafers),
                  names_to = "candy", values_to = "rating") %>%
     mutate(
         year = 2015,
         gender = NA,
-        country = NA
-    )%>%
-rename(are_you_going_trick_or_treating = are_you_going_actually_going_trick_or_treating_yourself)%>%
-rename(age = how_old_are_you)
+        country = NA,
+        rating = tolower(rating)
+    )
+names(candy_2015_pivot)
 ```
 
 
-```{r}
-removed_columns_candy_2015 <- select(candy_2015_pivot, -contains(c(
-  "please",
-  "guess_the_number",
-  "that_dress",
-  "fill_in",
-  "betty",
-  "which_day",
-  "check_all",
-  "if_you_squint",
-  "sea_salt",
-  "font")
-))
-```
 
 ```{r}
-glimpse(removed_columns_candy_2015)
-coe
+
 ```
