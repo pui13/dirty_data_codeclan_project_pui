@@ -1,0 +1,57 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+# Packages needed and load in data
+```{r}
+library(tidyverse)
+library(here)
+
+decathlon_data <- read_csv(here("clean_data/clean_decathlon_data.csv"))
+```
+# Who had the longest long jump seen in the data?
+
+```{r}
+decathlon_data%>%
+  filter(event == "long_jump")%>%
+  slice_max(result)
+```
+
+#What was the average 100m time in each competition?
+
+```{r}
+decathlon_data %>%
+  filter(event == "100m") %>%
+  group_by(competition) %>%
+  summarise(avg_time = mean(result))
+```
+Who had the highest total points across both competitions?
+
+```{r}
+decathlon_data %>%
+  group_by(name)%>%
+  summarise(total_time = sum(points))%>%
+  slice_max(total_time)
+```
+
+#What was the shot-put scores for the top three competitors in each competition?
+
+```{r}
+decathlon_data%>%
+  select(name, competition, event, result) %>%
+  filter(event == "shot_put") %>%
+  group_by(competition) %>%
+  slice_max(result, n=3)
+```
+
+#What was the average points for competitors who ran the 400m in less than 50 seconds vs. those that ran 400m in more than 50 seconds?
+
+```{r}
+decathlon_data %>%
+  filter(event == "400m") %>%
+  mutate(`400m_time` = if_else(result < 50, "under 50", "over 50")) %>%
+  group_by(`400m_time`) %>%
+  summarise(avg_points = mean(points))
+ 
+```
+

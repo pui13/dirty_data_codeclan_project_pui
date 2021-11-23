@@ -182,5 +182,5 @@ all_candy_country <- all_candy_country%>%
 
 ## write cleaned data to a new csv -----
 all_candy_country %>%
-  write_csv("clean_data/clean_all_candy.csv")
+write_csv("clean_data/clean_all_candy.csv")
 
