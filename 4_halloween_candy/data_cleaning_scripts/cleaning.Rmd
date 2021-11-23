@@ -165,7 +165,7 @@ removed_columns_candy_2017 <- select(candy_2017, -c(
           anonymous_brown_globs_that_come_in_black_and_orange_wrappers_a_k_a_mary_janes)
 
 names( candy_2017)
-```
+```ww
 
 ```{r}
 candy_2017_pivot <- removed_columns_candy_2017 %>%
@@ -184,5 +184,43 @@ names(candy_2017_pivot)
 ```{r}
 all_candy <- bind_rows(candy_2015_pivot, candy_2016_pivot, candy_2017_pivot)
 
+```
+
+```{r}
+usa_names <- str_c("usa", "state", "merica", "united s",
+                   "u.s", "us", "murica", "aayy", "alaska", "calif",
+                   "trump", "rika", "carolina", "new york", "pitts",
+                   "amerca", "cascadia", "new jersey", sep = "|"
+                   )
+
+canada_names <- str_c("canae", "canuck", "can", sep = "|")
+
+uk_names <- str_c("uk", "united kin", "scotland", "endland",
+                  "england", "god's country", "u.k", sep = "|" )
+
+other_names <- str_c("united states", "uk", "canada", sep = "|")
+
+all_candy_country_clean <- all_candy %>%
+  mutate(country = tolower(country),
+         country = if_else(str_detect(country, usa_names),
+                           "united states", country),
+         country = if_else(str_detect(country, canada_names),
+                           "canada", country),
+         country = if_else(str_detect(country, uk_names),
+                           "uk", country),
+         country = if_else(!str_detect(country, other_names),
+                           "other", country),
+         )
+
+all_candy_country_clean <- all_candy_country_clean%>%
+  mutate(country = replace_na(country, "other"))
+
+
+         
+
+unique(all_candy_country_clean$country)
+all_candy_country_clean %>%
+  group_by(country)%>%
+  summarise(count=n())
 ```
 
