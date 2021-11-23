@@ -1,0 +1,104 @@
+---
+title: "Halloween Candy Anaylsis"
+output: html_notebook
+---
+
+#load in libraries
+```{r}
+library(tidyverse)
+library(here)
+
+candy_data <- read_csv(here("clean_data/clean_all_candy.csv"))
+glimpse(candy_data)
+```
+
+
+#Analysis
+## What is the total number of candy ratings given across the three years.
+(Number of candy ratings, not the number of raters. Don’t count missing values)
+
+```{r}
+sum(!is.na(candy_data$rating))
+```
+
+##  What was the average age of people who are going out trick or treating?
+
+```{r}
+candy_data%>%
+  filter(going_trick_or_treating == "Yes") %>%
+  summarise(avg_age = mean(age, na.rm = TRUE))
+  
+```
+
+## What was the average age of people who are not going trick or treating?
+
+```{r}
+candy_data%>%
+  filter(going_trick_or_treating == "No") %>%
+  summarise(avg_age = mean(age, na.rm = TRUE))
+```
+
+## For each of joy, despair and meh, which candy bar received the most of these ratings?
+
+```{r}
+candy_data %>%
+  group_by(rating, candy)%>%
+  summarise(count = n()) %>%
+  slice_max(count)
+
+```
+
+## How many people rated Starburst as despair?
+
+```{r}
+candy_data %>%
+  filter(candy == "starburst" & rating == "despair")%>%
+  summarise(starburst_despair_ratings = n())
+```
+
+##For the next three questions, count despair as -1, joy as +1, and meh as 0.
+
+Made a new table and only kept the joy and despair ratings (meh = 0 so
+not needed in calculations). Changed "joy" to "1" and "despair" to "-1"
+
+```{r}
+rating_keep <- c("joy", "despair")
+
+candy_rating_filtered <- candy_data%>%
+  filter(rating %in% rating_keep)%>%
+  mutate(rating = if_else(rating == "joy", 1, -1))
+
+```
+
+
+## What was the most popular candy bar by this rating system for each gender in the dataset ?
+
+```{r}
+gender_filter <- c("Male", "Female")
+
+candy_rating_filtered  %>%
+  filter( gender %in% gender_filter)%>%
+  group_by(gender, candy)%>%
+  summarise(points = sum(rating))%>%
+  slice_max(points, n=2)
+```
+
+##What was the most popular candy bar in each year?
+
+```{r}
+candy_rating_filtered%>%
+  group_by(year, candy)%>%
+  summarise(points = sum(rating))%>%
+  slice_max(points, n=2)
+
+```
+
+## What was the most popular candy bar by this rating for people in US, Canada, UK, and all other countries?
+
+```{r}
+candy_rating_filtered%>%
+  group_by(country, candy)%>%
+  summarise(points = sum(rating))%>%
+  slice_max(points, n=2)
+```
+
