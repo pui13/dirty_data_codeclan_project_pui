@@ -1,10 +1,33 @@
 ---
-title: "Halloween Candy Anaylsis"
-output: html_notebook
+title: "Halloween Candy Analysis"
+output:
+  html_document:
+    df_print: paged
 ---
 
-#load in libraries
-```{r}
+# Introduction
+
+The dataset used for the analysis below came from three annual datasets (2015,
+2016, 2017). The three raw datasets were all cleaned then combined to enable analysys
+to be carried out. Below are some assumptions made whilst cleaning :
+
+1. Only included ages between 4-90 in the age column, made the rest NA's.
+2. Removed any items which I deemed were not candies
+3. Removed the coloured M&Ms as this was a hidden proxy question, as stated on the website containing the datasets.
+4. A lot of renaming was done for the countries to account for misspellings and 'creative' country naming. For example:
+    * Canada - "soviet canuckistan" and "canae"
+    * United States - "cascadia" and state names
+    * UK - all the different countries that make up the UK and "god's country"
+
+Things I could have done with more time when cleaning to improve results :
+
+* Rescued some NA countries in the 2017 dataset by checking if there is an input in the state/region column
+* Rescued some NA ages by checking if they've been entered in the country column 
+
+
+
+##### Load in packages and data
+```{r message=FALSE}
 library(tidyverse)
 library(here)
 
@@ -13,15 +36,17 @@ glimpse(candy_data)
 ```
 
 
-#Analysis
-## What is the total number of candy ratings given across the three years.
+# Analysis
+
+#### What is the total number of candy ratings given across the three years.
 (Number of candy ratings, not the number of raters. Don’t count missing values)
 
 ```{r}
 sum(!is.na(candy_data$rating))
 ```
 
-##  What was the average age of people who are going out trick or treating?
+
+#### What was the average age of people who are going out trick or treating?
 
 ```{r}
 candy_data%>%
@@ -30,7 +55,7 @@ candy_data%>%
   
 ```
 
-## What was the average age of people who are not going trick or treating?
+#### What was the average age of people who are not going trick or treating?
 
 ```{r}
 candy_data%>%
@@ -38,17 +63,18 @@ candy_data%>%
   summarise(avg_age = mean(age, na.rm = TRUE))
 ```
 
-## For each of joy, despair and meh, which candy bar received the most of these ratings?
+#### For each of joy, despair and meh, which candy bar received the most of these ratings?
 
-```{r}
+```{r, message=FALSE}
 candy_data %>%
+  filter( !is.na(rating))%>%
   group_by(rating, candy)%>%
   summarise(count = n()) %>%
-  slice_max(count)
+  slice_max(count) 
 
 ```
 
-## How many people rated Starburst as despair?
+#### How many people rated Starburst as despair?
 
 ```{r}
 candy_data %>%
@@ -56,10 +82,10 @@ candy_data %>%
   summarise(starburst_despair_ratings = n())
 ```
 
-##For the next three questions, count despair as -1, joy as +1, and meh as 0.
+#### *For the next three questions, count despair as -1, joy as +1, and meh as 0.*
 
-Made a new table and only kept the joy and despair ratings (meh = 0 so
-not needed in calculations). Changed "joy" to "1" and "despair" to "-1"
+*Made a new table and only kept the joy and despair ratings (meh = 0 so
+not needed in calculations). Changed "joy" to "1" and "despair" to "-1"*
 
 ```{r}
 rating_keep <- c("joy", "despair")
@@ -70,11 +96,13 @@ candy_rating_filtered <- candy_data%>%
 
 ```
 
+*For the answers below, I included the top two most popular for each category, as
+full sized candy bar was the most popular for every category.*
 
-## What was the most popular candy bar by this rating system for each gender in the dataset ?
+#### What was the most popular candy bar by this rating system for each gender in the dataset ?
 
-```{r}
-gender_filter <- c("Male", "Female")
+```{r, message=FALSE}
+gender_filter <- c("Male", "Female", "Other")
 
 candy_rating_filtered  %>%
   filter( gender %in% gender_filter)%>%
@@ -83,9 +111,9 @@ candy_rating_filtered  %>%
   slice_max(points, n=2)
 ```
 
-##What was the most popular candy bar in each year?
+#### What was the most popular candy bar in each year?
 
-```{r}
+```{r, message=FALSE}
 candy_rating_filtered%>%
   group_by(year, candy)%>%
   summarise(points = sum(rating))%>%
@@ -93,9 +121,9 @@ candy_rating_filtered%>%
 
 ```
 
-## What was the most popular candy bar by this rating for people in US, Canada, UK, and all other countries?
+#### What was the most popular candy bar by this rating for people in US, Canada, UK, and all other countries?
 
-```{r}
+```{r, message=FALSE}
 candy_rating_filtered%>%
   group_by(country, candy)%>%
   summarise(points = sum(rating))%>%
