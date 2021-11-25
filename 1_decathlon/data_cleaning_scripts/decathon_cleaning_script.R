@@ -2,10 +2,11 @@
 
 library(tidyverse)
 library(janitor)
+library(here)
 
 # Load in data and have a quick look at data ------
 
-decathlon_data <- read_rds("raw_data/decathlon.rds")
+decathlon_data <- read_rds(here("raw_data/decathlon.rds"))
 glimpse(decathlon_data)
 
 # Cleaning data -------
@@ -21,7 +22,8 @@ decathlon_data <- decathlon_data %>%
   rename("100m" = "x100m",
          "400m" = "x400m",
          "110m_hurdle" = "x110m_hurdle",
-         "1500m" = "x1500m"
+         "1500m" = "x1500m",
+         "javelin" = "javeline"
   )
   
 
@@ -33,4 +35,4 @@ clean_decathlon_data <- decathlon_data %>%
 # Save dataset as new CSV
 
 clean_decathlon_data %>%
-  write_csv("clean_data/clean_decathlon_data.csv")
+  write_csv(here("clean_data/clean_decathlon_data.csv"))

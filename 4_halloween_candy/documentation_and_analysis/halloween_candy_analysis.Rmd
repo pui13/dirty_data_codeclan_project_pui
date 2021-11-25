@@ -7,16 +7,29 @@ output:
 
 # Introduction
 
-The dataset used for the analysis below came from three annual datasets (2015,
-2016, 2017). The three raw datasets were all cleaned then combined to enable analysys
-to be carried out. Below are some assumptions made whilst cleaning :
+The data used for the analysis below came from three datasets (2015,
+2016, 2017). The datasets for each year contained ratings of various items,
+some questions about the person and random questions which were unnecessary for this analysis.  
+The three raw datasets were all cleaned then combined to enable analysis
+to be carried out.
+Summary of cleaning stages :
 
-1. Only included ages between 4-90 in the age column, made the rest NA's.
-2. Removed any items which I deemed were not candies
-3. Removed the coloured M&Ms as this was a hidden proxy question, as stated on the website containing the datasets.
-4. A lot of renaming was done for the countries to account for misspellings and 'creative' country naming. For example:
+* Cleaned all column names
+* Removed any irrelevant columns
+* Pivotted some of the data to make for easier analysis
+* Renamed various candy and country inputs to make it uniform
+* Filtered ages outwith 4-90 and turned them to NA's
+* Removed any items which weren't candies
+* Made sure all datasets had the same columns to enable binding to take place
+
+
+
+Assumptions made whilst cleaning :
+
+1. Removed the coloured M&Ms as this was a hidden proxy question, as stated on the website containing the datasets.
+2. A lot of renaming was done for the countries to account for misspellings and 'creative' country naming. For example:
     * Canada - "soviet canuckistan" and "canae"
-    * United States - "cascadia" and state names
+    * United States - "cascadia" and "trumpistan"
     * UK - all the different countries that make up the UK and "god's country"
 
 Things I could have done with more time when cleaning to improve results :
@@ -130,3 +143,9 @@ candy_rating_filtered%>%
   slice_max(points, n=2)
 ```
 
+
+# Conclusion
+
+Any full sized candy bar was the most popular, this is most likely down to the vague description hence covering a wide range of candy. If necessary, further analysis could be done on the data provided, a useful analysis could be comparing the the popularity change of each candy year-on-year.
+
+ To make future surveys more conducive to better analysis, I would suggest using the same survey questions and format. Another way of improving results could be to introduce a drop down menu with answers for questions like age and country, this would eliminate any misspellings.
