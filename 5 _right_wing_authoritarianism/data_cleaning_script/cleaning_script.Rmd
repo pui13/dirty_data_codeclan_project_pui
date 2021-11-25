@@ -1,0 +1,71 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(here)
+
+rwa <- read_csv(here("raw_data/rwa.csv"))
+
+glimpse(rwa)
+```
+
+```{r}
+rwa <- clean_names(rwa) %>%
+  select(q3:q22, gender, hand, urban, familysize, education, testelapse, age)
+```
+
+# experiment reversing number
+```{r}
+q <- c( "q4", "q6", "q8", "q9", "q11", "q13", "q15", "q18", "q20", "q21")
+
+rwa <- rwa %>%
+  rename( test_time_secs = testelapse,
+          childhood_area = urban,
+          family_size = familysize) %>%
+  mutate(across(.cols = q3:q22, ~ na_if(.x, 0)), 
+         across(.cols = q, ~ (10 - .x)),
+          gender = case_when(
+            gender == 1 ~ "male",
+            gender == 2 ~ "female",
+            gender == 3 ~ "other"
+            ),
+          hand = case_when(
+            hand == 1 ~ "right",
+            hand == 2 ~ "left",
+            hand == 3 ~ "both"
+            ),
+          childhood_area = case_when(
+            childhood_area == 1 ~ "rural",
+            childhood_area == 2 ~ "surburban",
+            childhood_area == 3 ~ "urban"
+            ),
+          education = case_when(
+            education == 1 ~ "less than high school",
+            education == 2 ~ "high school",
+            education == 3 ~ "university degree",
+            education == 4 ~ "graduate"
+            ),
+        
+         )
+
+  colnames(rwa) <- gsub("q", "", x = colnames(rwa))
+
+```
+
+# try loop
+#```{r}
+q <- c(  "q4", "q6", "q8", "q9", "q11", "q13", "q15", "q18", "q20", "q21")
+
+reverse_rwa <- rwa %>%
+  mutate(across(.cols = q, ~ -(.x - 10))) 
+#```
+
+```{r}
+pivot_rwa <- rwa %>%
+  pivot_longer(cols = "3":"22", names_to = "question", values_to = "score")
+```
+
